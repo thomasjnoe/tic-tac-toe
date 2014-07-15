@@ -45,7 +45,7 @@ class TicTacToe
 		grid.each_with_index do |square, index|
 			if (index+1) % 3 == 0
 				print " #{square} \n"
-				print "-----------\n" if square != 9
+				print "-----------\n" if index != 8
 			else
 				print " #{square} |"
 			end
