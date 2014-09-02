@@ -26,20 +26,32 @@ class TicTacToe
 	end
 
 	def play_game
-		while playing
-			reset_board
-			reset_turns
-			puts "\nLet's play Tic-Tac-Toe!\n"
+		loop do
 			game_loop
-			puts "\nPlayer #{player_turn} wins!" if winner?
-			puts "\nThe game ends in a tie!" if tie? && !winner?
-			display_board
-			play_again?
+			break unless play_again?
 		end
 		puts "Thanks for playing!"
 	end
 
 	private
+
+	def start_game
+		reset_board
+		reset_turns
+		puts "\nLet's play Tic-Tac-Toe!\n"
+	end
+
+	def game_loop
+		start_game
+		until game_over?
+			self.turns += 1
+			puts "\nPlayer #{player_turn}, pick a square:"
+			display_board
+			set_move(valid_move)
+		end
+		game_over_message
+		display_board
+	end
 
 	def display_board
 		grid.each_with_index do |square, index|
@@ -57,15 +69,6 @@ class TicTacToe
 		turns % 2 != 0 ? player1.symbol : player2.symbol
 	end
 
-	def game_loop
-		until winner? || tie?
-			self.turns += 1
-			puts "\nPlayer #{player_turn}, pick a square:"
-			display_board
-			pick_square
-		end
-	end
-
 	def pick_square
 		begin
 			# Check if input is a number
@@ -74,17 +77,24 @@ class TicTacToe
 			puts "Invalid input! Please pick a square:"
 			display_board
 			retry
-		else
-			# Check if square has already been selected
-			if square_already_selected?(square.to_i - 1)
+		end
+		return square.to_i - 1
+	end
+
+	def valid_move
+		loop do
+			square = pick_square
+			if square_already_selected?(square)
 				puts "\nSquare has already been picked! Pick another square:"
 				display_board
-				pick_square
 			else
-				# Set chosen square to "X" or "O" depending on the player
-				grid[square.to_i - 1] = player_turn
+				return square
 			end
 		end
+	end
+
+	def set_move(square)
+		grid[square] = player_turn
 	end
 
 	def square_already_selected?(square)
@@ -97,6 +107,21 @@ class TicTacToe
 
 	def reset_turns
 		self.turns = 0
+	end
+
+	def game_over_message
+		puts "\nPlayer #{player_turn} wins!" if winner?
+		puts "\nThe game ends in a tie!" if tie? && !winner?
+	end
+
+	def game_over?
+		if winner?
+			true
+		elsif tie?
+			true
+		else
+			false
+		end
 	end
 
 	def winner?
@@ -112,12 +137,11 @@ class TicTacToe
 	def play_again?
 		puts "\nPlay again? (Y/N):"
 		prompt = gets.chomp
-		self.playing = 
-			if prompt.to_s.downcase == "y"
-				true
-			else
-				false
-			end
+		if prompt.to_s.downcase == "y"
+			true
+		else
+			false
+		end
 	end
 
 	class Player
@@ -131,5 +155,5 @@ class TicTacToe
 
 end
 
-game = TicTacToe.new
-game.play_game
+#game = TicTacToe.new
+#game.play_game
