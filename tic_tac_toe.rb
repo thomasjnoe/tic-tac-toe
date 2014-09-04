@@ -115,13 +115,7 @@ class TicTacToe
 	end
 
 	def game_over?
-		if winner?
-			true
-		elsif tie?
-			true
-		else
-			false
-		end
+		winner? || tie?
 	end
 
 	def winner?
@@ -137,11 +131,7 @@ class TicTacToe
 	def play_again?
 		puts "\nPlay again? (Y/N):"
 		prompt = gets.chomp
-		if prompt.to_s.downcase == "y"
-			true
-		else
-			false
-		end
+		return prompt.to_s.downcase == "y"
 	end
 
 	class Player
@@ -155,5 +145,5 @@ class TicTacToe
 
 end
 
-#game = TicTacToe.new
-#game.play_game
+game = TicTacToe.new
+game.play_game
