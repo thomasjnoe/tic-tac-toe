@@ -4,6 +4,8 @@ class TicTacToe
 	attr_reader :player1, :player2, :conditions
 	attr_accessor :grid, :turns, :playing
 
+	Player = Struct.new(:symbol)
+
 	def initialize
 		@player1 = Player.new("X")
 		@player2 = Player.new("O")
@@ -133,16 +135,6 @@ class TicTacToe
 		prompt = gets.chomp
 		return prompt.to_s.downcase == "y"
 	end
-
-	class Player
-		attr_accessor :symbol
-
-		def initialize(symbol)
-			@symbol = symbol
-		end
-
-	end
-
 end
 
 game = TicTacToe.new
